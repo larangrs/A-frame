@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria Jardins AR</title>
+    
+    <!-- A-Frame 1.4.0 -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    
+    <!-- AR.js atualizado -->
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar-nft.js"></script>
+    
+    <!-- DRACOLoader -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/DRACOLoader.js"></script>
+</head>
+<body>
+    <a-scene embedded arjs="trackingMethod: best;">
+    
+        <a-assets>
+            <a-asset-item id="modelo" src="modelos/escritorio_adv3D.glb"></a-asset-item>
+        </a-assets>
+
+        <a-entity 
+            gltf-model="#modelo"
+            position="0 0 -3"
+            scale="0.08 0.08 0.08"
+            rotation="-90 0 0"
+            visible="false"
+            animation="property: visible; to: true; dur: 1000; startEvents: model-loaded">
+        </a-entity>
+
+        <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
+        <a-light type="directional" position="1 1 1" intensity="0.5"></a-light>
+
+    </a-scene>
+
+    <script>
+        // Configuração do DRACOLoader
+        AFRAME.registerComponent('draco-loader', {
+            init: function() {
+                const dracoLoader = new THREE.DRACOLoader();
+                dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/libs/draco/');
+                this.el.sceneEl.systems.gltf.modelLoader.dracoLoader = dracoLoader;
+            }
+        });
+
+        // Verificação de erros
+        document.querySelector('a-entity').addEventListener('model-error', (error) => {
+            console.error('Erro no modelo:', error);
+        });
+
+        // Log quando o modelo for carregado com sucesso
+        document.querySelector('a-entity').addEventListener('model-loaded', () => {
+            console.log('Modelo carregado com sucesso!');
+        });
+    </script>
+</body>
+</html>
